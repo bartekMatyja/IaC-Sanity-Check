@@ -17,7 +17,7 @@ The easiest way to run the scanner is using Docker. No installation of Python or
 
 ```bash
 # 1. Pull the image
-docker pull ghcr.io/<YOUR-USERNAME>/iac-sanity-checker:latest
+docker pull ghcr.io/bartekMatyja/IaC-Sanity-Check/:latest
 
 # 2. Run the scan
 # Mount your code to /app/data
@@ -27,7 +27,7 @@ export OPENAI_API_KEY="your-api-key"
 docker run --rm \
   -e OPENAI_API_KEY=$OPENAI_API_KEY \
   -v $(pwd):/app/data \
-  ghcr.io/<YOUR-USERNAME>/iac-sanity-checker:latest /app/data --generate-report
+  ghcr.io/bartekMatyja/IaC-Sanity-Check/:latest /app/data --generate-report
 ```
 
 ### Configuration
@@ -52,7 +52,7 @@ Use the provided template or configure manually:
 iac_security_scan:
   stage: test
   image: 
-    name: ghcr.io/<YOUR-USERNAME>/iac-sanity-checker:latest
+    name: ghcr.io/bartekMatyja/IaC-Sanity-Check/:latest
     entrypoint: [""]
   variables:
     OPENAI_API_KEY: $OPENAI_API_KEY
@@ -70,7 +70,7 @@ iac_security_scan:
 steps:
   - uses: actions/checkout@v3
   - name: Run IaC Sanity Check
-    uses: docker://ghcr.io/<YOUR-USERNAME>/iac-sanity-checker:latest
+    uses: docker://ghcr.io/bartekMatyja/IaC-Sanity-Check/:latest
     with:
       args: . --generate-report
     env:
@@ -85,7 +85,7 @@ stage('AI Security Scan') {
         OPENAI_API_KEY = credentials('openai-api-key')
     }
     steps {
-        sh 'docker run --rm -e OPENAI_API_KEY=${OPENAI_API_KEY} -v ${WORKSPACE}:/app/data ghcr.io/<YOUR-USERNAME>/iac-sanity-checker:latest /app/data --generate-report'
+        sh 'docker run --rm -e OPENAI_API_KEY=${OPENAI_API_KEY} -v ${WORKSPACE}:/app/data ghcr.io/bartekMatyja/IaC-Sanity-Check/:latest /app/data --generate-report'
     }
 }
 ```
