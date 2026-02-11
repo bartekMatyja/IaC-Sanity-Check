@@ -1,0 +1,16 @@
+iac_security_scan:
+  stage: test
+  image: 
+    name: registry.gitlab.com/your-group/iac-sanity-checker:latest # Update with your registry path
+    entrypoint: [""]
+  variables:
+    OPENAI_API_KEY: $OPENAI_API_KEY # Ensure this variable is set in CI/CD settings
+  script:
+    - python /app/main.py . --generate-report --min-severity LOW
+  artifacts:
+    paths:
+      - security_audit_report.html
+    when: always
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_MERGE_REQUEST_ID

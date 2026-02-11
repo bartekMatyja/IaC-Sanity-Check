@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Audit Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
+        .container { width: 80%; margin: auto; overflow: hidden; padding: 20px; }
+        header { background: #35424a; color: #ffffff; padding-top: 30px; min-height: 70px; border-bottom: #e8491d 3px solid; }
+        header h1 { text-align: center; text-transform: uppercase; margin: 0; }
+        .summary { background: #fff; padding: 20px; margin-top: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .issue { background: #fff; margin-top: 20px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-left: 5px solid #e8491d; }
+        .issue.HIGH, .issue.CRITICAL { border-left-color: #d9534f; }
+        .issue.MEDIUM { border-left-color: #f0ad4e; }
+        .issue.LOW { border-left-color: #5bc0de; }
+        h2 { color: #35424a; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+        .footer { text-align: center; padding: 20px; margin-top: 20px; color: #777; font-size: 0.9em; }
+        .severity-badge { display: inline-block; padding: 5px 10px; color: #fff; border-radius: 4px; font-weight: bold; }
+        .bg-CRITICAL { background-color: #d9534f; }
+        .bg-HIGH { background-color: #d9534f; }
+        .bg-MEDIUM { background-color: #f0ad4e; }
+        .bg-LOW { background-color: #5bc0de; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Monthly Security Audit</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="summary">
+            <h2>Executive Summary</h2>
+            <p><strong>Date:</strong> 2026-02-08 20:29:45</p>
+            <p><strong>Total Issues Found:</strong> 21</p>
+            <p><strong>Scanned Directory:</strong> /Users/bartoszmatyja/Desktop/test</p>
+        </div>
+
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_161: Ensure RDS database has IAM authentication enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_293: Ensure that AWS database instances have deletion protection enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_353: Ensure that RDS instances have performance insights enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_157: Ensure that RDS instances have Multi-AZ enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_129: Ensure that respective logs of Amazon Relational Database Service (Amazon RDS) are enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_226: Ensure DB instance gets all minor upgrades automatically
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_17: Ensure all data stored in RDS is not publicly accessible
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_118: Ensure that enhanced monitoring is enabled for Amazon RDS instances
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_16: Ensure all data stored in the RDS is securely encrypted at rest
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_24: Ensure no security groups allow ingress from 0.0.0.0:0 to port 22
+            </h2>
+            <p><strong>Resource:</strong> aws_security_group.allow_ssh</p>
+            <p><strong>File:</strong> /vulnerable.tf:16-23</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_security_group" "allow_ssh" {
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # TO JEST BŁĄD!
+  }
+}</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_23: Ensure every security group and rule has a description
+            </h2>
+            <p><strong>Resource:</strong> aws_security_group.allow_ssh</p>
+            <p><strong>File:</strong> /vulnerable.tf:16-23</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_security_group" "allow_ssh" {
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # TO JEST BŁĄD!
+  }
+}</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV2_AWS_60: Ensure RDS instance with copy tags to snapshots is enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_db_instance.unsafe_db</p>
+            <p><strong>File:</strong> /vulnerable.tf:8-13</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_db_instance" "unsafe_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  publicly_accessible  = true # TO JEST BŁĄD!
+  password             = "Pas**********" # HARDCODED SECRET!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_20: S3 Bucket has an ACL defined which allows public READ access.
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV2_AWS_5: Ensure that Security Groups are attached to another resource
+            </h2>
+            <p><strong>Resource:</strong> aws_security_group.allow_ssh</p>
+            <p><strong>File:</strong> /vulnerable.tf:16-23</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_security_group" "allow_ssh" {
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # TO JEST BŁĄD!
+  }
+}</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV2_AWS_62: Ensure S3 buckets should have event notifications enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV2_AWS_6: Ensure that S3 bucket has a Public Access block
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV2_AWS_61: Ensure that an S3 bucket has a lifecycle configuration
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_18: Ensure the S3 bucket has access logging enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_145: Ensure that S3 buckets are encrypted with KMS by default
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_144: Ensure that S3 bucket has cross-region replication enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="severity-badge bg-LOW">LOW</span>
+                CKV_AWS_21: Ensure all data stored in the S3 bucket have versioning enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.leaky_bucket</p>
+            <p><strong>File:</strong> /vulnerable.tf:2-5</p>
+            
+            <h3>Original Code</h3>
+            <pre>resource "aws_s3_bucket" "leaky_bucket" {
+  bucket = "my-very-secret-data-12345"
+  acl    = "public-read" # TO JEST BŁĄD!
+}
+</pre>
+
+            <h3>AI Analysis & Fix</h3>
+            <div class="ai-response">
+                Comparison unavailable: OPENAI_API_KEY not set.
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="footer">
+        <p>Generated by IaC Sanity Checker | Powered by OpenAI</p>
+    </div>
+</body>
+</html>

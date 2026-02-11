@@ -1,0 +1,9 @@
+#!/Users/bartoszmatyja/.gemini/antigravity/scratch/iac_sanity_checker/venv/bin/python3.12
+from checkov.main import Checkov
+import warnings
+import sys
+
+if __name__ == '__main__':
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=SyntaxWarning)
+        sys.exit(Checkov().run())

@@ -1,0 +1,3 @@
+checkov
+openai
+jinja2
