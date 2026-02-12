@@ -3,7 +3,9 @@ import sys
 import os
 import logging
 from scanner import run_checkov
-from ai_fixer import get_fix_for_check
+from secrets_scanner import run_gitleaks_scan
+from container_scanner import run_trivy_scan
+from ai_fixer import get_fix_for_check, get_fix_for_container_issue
 from reporter import generate_report
 
 # Configure logging
@@ -19,85 +21,124 @@ SEVERITY_ORDER = {
 }
 
 def main():
-    parser = argparse.ArgumentParser(description="IaC Sanity Check Tool - Scan Terraform code and suggest AI fixes.")
-    parser.add_argument("directory", help="Path to the directory containing Terraform files to scan.")
+    parser = argparse.ArgumentParser(description="IaC Sanity Check Tool - CI/CD Security Shield")
+    parser.add_argument("directory", help="Path to the directory to scan.")
     parser.add_argument("--min-severity", default="LOW", choices=["LOW", "MEDIUM", "HIGH", "CRITICAL"], 
-                        help="Minimum severity level to report (default: LOW).")
+                        help="Minimum severity level for IaC report (default: LOW).")
     parser.add_argument("--generate-report", action="store_true", help="Generate an HTML report.")
     
     args = parser.parse_args()
-
     target_dir = os.path.abspath(args.directory)
+    
     if not os.path.isdir(target_dir):
         logger.error(f"Error: Directory '{target_dir}' does not exist.")
         sys.exit(1)
 
-    logger.info(f"Starting scan on directory: {target_dir}")
+    logger.info(f"🛡️ Starting Comprehensive Security Scan on: {target_dir}")
+    
+    # ---------------------------------------------------------
+    # 1. IaC Scan (Checkov)
+    # ---------------------------------------------------------
+    logger.info("--- Phase 1: Infrastructure as Code Scan (Checkov) ---")
     all_checks = run_checkov(target_dir)
-
-    # Filter by severity
+    iac_findings = []
+    
     min_severity_score = SEVERITY_ORDER.get(args.min_severity, 0)
-    failed_checks = []
+    
     for c in all_checks:
-        severity_val = c.get('severity')
-        if severity_val is None:
-            severity_val = 'UNKNOWN'
-        
-        if SEVERITY_ORDER.get(severity_val.upper(), 0) >= min_severity_score:
-            c['severity'] = severity_val.upper() # Standardize to upper case
-            failed_checks.append(c)
-    
-    ignored_count = len(all_checks) - len(failed_checks)
-    if ignored_count > 0:
-        logger.info(f"Ignored {ignored_count} issues below severity {args.min_severity}.")
+        severity_val = c.get('severity', 'UNKNOWN').upper()
+        if SEVERITY_ORDER.get(severity_val, 0) >= min_severity_score:
+            c['severity'] = severity_val
+            
+            # Get AI Fix for IaC
+            print(f"🤖 Analyzing IaC issue: {c['check_id']}...")
+            # We need to ensure code_block is a string for the AI prompt
+            if isinstance(c.get('code_block'), list):
+                 code_str = "".join([line[1] for line in c.get('code_block', [])])
+                 c['code_block'] = code_str
+            
+            fix = get_fix_for_check(c)
+            iac_findings.append({'check': c, 'fix': fix})
 
-    if not failed_checks:
-        logger.info("No security issues found matching criteria! Great job.")
-        sys.exit(0)
+    logger.info(f"IaC Scan complete. Found {len(iac_findings)} issues.")
 
-    logger.warning(f"Found {len(failed_checks)} security issues. Fetching fixes...")
-    
-    findings = []
-    
-    # Process each failed check
-    for i, check in enumerate(failed_checks, 1):
-        print("\n" + "="*60)
-        print(f"Issue #{i}: {check['check_id']} - {check['check_name']}")
-        print(f"Severity: {check.get('severity', 'UNKNOWN')}")
-        print(f"File: {check['file_path']}")
-        print(f"Resource: {check['resource']}")
-        print("-"*60)
-        
-        print("Original Code Snippet:")
-        # Checkov code_block is a list of [line_num, line_content]
-        try:
-             # Extract just the code lines
-             code_lines = [line[1] for line in check.get('code_block', [])]
-             print("".join(code_lines))
-        except Exception:
-             print("(Code snippet unavailable)")
+    # ---------------------------------------------------------
+    # 2. Secrets Scan (Gitleaks)
+    # ---------------------------------------------------------
+    logger.info("--- Phase 2: Secrets Detection (Gitleaks) ---")
+    secrets_data = run_gitleaks_scan(target_dir)
+    # Gitleaks output is a list of findings
+    secrets_findings = secrets_data if isinstance(secrets_data, list) else []
+    logger.info(f"Secrets Scan complete. Found {len(secrets_findings)} secrets.")
 
-        print("-" * 60)
-        print("🤖 AI Analysis & Fix:")
-        
-        # We need to construct a string representation of the code block for the AI prompt
-        code_str = "".join([line[1] for line in check.get('code_block', [])])
-        # Update the check dict with the string representation for the AI fixer
-        check['code_block'] = code_str
-        
-        fix = get_fix_for_check(check)
-        print(fix)
-        print("="*60 + "\n")
-        
-        findings.append({
-            'check': check,
-            'fix': fix
-        })
+    # ---------------------------------------------------------
+    # 3. Container Scan (Trivy)
+    # ---------------------------------------------------------
+    logger.info("--- Phase 3: Container Security Scan (Trivy) ---")
+    trivy_data = run_trivy_scan(target_dir)
+    container_findings = []
+    
+    # Process Trivy results
+    if 'Results' in trivy_data:
+        for result in trivy_data['Results']:
+            target = result.get('Target', 'Unknown')
+            for vuln in result.get('Vulnerabilities', []):
+                vuln['target'] = target
+                vuln['severity'] = vuln.get('Severity', 'UNKNOWN')
+                vuln['title'] = vuln.get('Title', vuln.get('PkgName', 'Unknown'))
+                vuln['vulnerability_id'] = vuln.get('VulnerabilityID', 'Unknown')
+                vuln['pkg_name'] = vuln.get('PkgName', 'Unknown')
+                vuln['installed_version'] = vuln.get('InstalledVersion', 'Unknown')
+                vuln['fixed_version'] = vuln.get('FixedVersion', 'Unknown')
+                vuln['description'] = vuln.get('Description', '')
+
+                # AI Fix for Critical Dockerfile issues
+                if 'Dockerfile' in target and vuln['severity'] == 'CRITICAL':
+                    print(f"🤖 Analyzing Critical Dockerfile vulnerability: {vuln['vulnerability_id']}...")
+                    fix = get_fix_for_container_issue(vuln)
+                    vuln['fix'] = fix
+                else:
+                    vuln['fix'] = None
+                
+                container_findings.append(vuln)
+    
+    logger.info(f"Container Scan complete. Found {len(container_findings)} vulnerabilities.")
+
+    # ---------------------------------------------------------
+    # Consolidated Reporting & Exit Logic
+    # ---------------------------------------------------------
+    consolidated_findings = {
+        'iac': iac_findings,
+        'secrets': secrets_findings,
+        'containers': container_findings
+    }
 
     if args.generate_report:
-        generate_report(findings, target_dir)
+        generate_report(consolidated_findings, target_dir)
 
-    logger.info("Scan complete.")
+    # Check for failure conditions (CRITICAL issues in any category)
+    fail_pipeline = False
+    
+    # Check IaC
+    if any(item['check']['severity'] == 'CRITICAL' for item in iac_findings):
+        logger.error("❌ Pipeline Failed: Critical IaC issues found.")
+        fail_pipeline = True
+        
+    # Check Secrets (Always critical)
+    if secrets_findings:
+        logger.error("❌ Pipeline Failed: Secrets detected.")
+        fail_pipeline = True
+        
+    # Check Containers
+    if any(item['severity'] == 'CRITICAL' for item in container_findings):
+        logger.error("❌ Pipeline Failed: Critical Container vulnerabilities found.")
+        fail_pipeline = True
+
+    if fail_pipeline:
+        sys.exit(1)
+        
+    logger.info("✅ Security Shield Scan Passed!")
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()

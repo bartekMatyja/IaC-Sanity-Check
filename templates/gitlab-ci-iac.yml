@@ -1,13 +1,15 @@
+# Unified CI/CD Security Shield (IaC + Secrets + Containers)
 iac_security_scan:
   stage: test
   image: 
-    name: registry.gitlab.com/your-group/iac-sanity-checker:latest # Update with your registry path
+    name: ghcr.io/<YOUR-USERNAME>/iac-sanity-checker:latest
     entrypoint: [""]
   variables:
     OPENAI_API_KEY: $OPENAI_API_KEY # Ensure this variable is set in CI/CD settings
   script:
-    - python /app/main.py . --generate-report --min-severity LOW
+    - python /app/main.pyc . --generate-report --min-severity LOW
   artifacts:
+    name: "security-shield-report-$CI_COMMIT_SHORT_SHA"
     paths:
       - security_audit_report.html
     when: always

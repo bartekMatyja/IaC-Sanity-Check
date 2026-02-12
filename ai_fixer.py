@@ -58,3 +58,50 @@ def get_fix_for_check(failed_check: dict) -> str:
     except Exception as e:
         logger.error(f"Error fetching fix from OpenAI: {e}")
         return "Error fetching fix."
+
+def get_fix_for_container_issue(issue: dict) -> str:
+    """
+    Uses OpenAI API to suggest a fix for a Dockerfile vulnerability found by Trivy.
+    """
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        logger.warning("OPENAI_API_KEY not set. Cannot fetch fix.")
+        return "Comparison unavailable: OPENAI_API_KEY not set."
+
+    client = openai.OpenAI(api_key=api_key)
+
+    prompt = f"""
+    You are a Senior DevSecOps Architect.
+    A container security scan (Trivy) has identified a vulnerability in the Dockerfile.
+    
+    Vulnerability ID: {issue.get('VulnerabilityID', issue.get('ID'))}
+    Title: {issue.get('Title', issue.get('PkgName'))}
+    Severity: {issue.get('Severity', 'UNKNOWN')}
+    Description: {issue.get('Description')}
+    
+    Please provide:
+    1. A clear explanation of why this is dangerous.
+    2. The specific changes needed in the Dockerfile to fix this (e.g., update package, change instruction).
+    
+    Format your response as follows:
+    
+    ### Risk Analysis
+    [Explanation here]
+    
+    ### Remediation
+    [Instructions/Code here]
+    """
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are a Senior DevSecOps Architect who explains security risks clearly to developers and managers."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.2,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        logger.error(f"Error fetching fix from OpenAI: {e}")
+        return "Error fetching fix."

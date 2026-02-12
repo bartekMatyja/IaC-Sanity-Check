@@ -1,8 +1,13 @@
-# IaC Sanity Check Tool (SaaS-lite)
+# IaC Security Shield (SaaS-lite)
 
-**Professional Infrastructure-as-Code Security Scanner powered by AI.**
+**The Ultimate CI/CD Security Shield: IaC + Secrets + Container Scanning.**
 
-This tool scans your Terraform code for security vulnerabilities using `checkov` and provides AI-driven remediation suggestions using OpenAI. It is delivered as a secure, containerized solution.
+This tool provides a comprehensive security scan for your infrastructure and build pipelines. It combines multiple industry-standard tools into a single, AI-enhanced report:
+
+1.  **Infrastructure as Code**: Scans Terraform with `checkov`.
+2.  **Secrets Detection**: Scans for hardcoded credentials with `gitleaks`.
+3.  **Container Security**: Scans Dockerfiles and filesystems with `trivy`.
+4.  **AI Remediation**: Uses OpenAI to suggest fixes for IaC and Dockerfile vulnerabilities.
 
 ## Prerequisites
 

@@ -1,66 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Audit Report</title>
+    <title>CI/CD Security Shield Report</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
-        .container { width: 80%; margin: auto; overflow: hidden; padding: 20px; }
-        header { background: #35424a; color: #ffffff; padding-top: 30px; min-height: 70px; border-bottom: #e8491d 3px solid; }
-        header h1 { text-align: center; text-transform: uppercase; margin: 0; }
-        .summary { background: #fff; padding: 20px; margin-top: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .issue { background: #fff; margin-top: 20px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-left: 5px solid #e8491d; }
-        .issue.HIGH, .issue.CRITICAL { border-left-color: #d9534f; }
-        .issue.MEDIUM { border-left-color: #f0ad4e; }
-        .issue.LOW { border-left-color: #5bc0de; }
-        h2 { color: #35424a; }
-        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
-        .footer { text-align: center; padding: 20px; margin-top: 20px; color: #777; font-size: 0.9em; }
-        .severity-badge { display: inline-block; padding: 5px 10px; color: #fff; border-radius: 4px; font-weight: bold; }
-        .bg-CRITICAL { background-color: #d9534f; }
-        .bg-HIGH { background-color: #d9534f; }
-        .bg-MEDIUM { background-color: #f0ad4e; }
-        .bg-LOW { background-color: #5bc0de; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        header {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 20px 0;
+            border-bottom: #e74c3c 4px solid;
+        }
+
+        header h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        /* Dashboard Summary */
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            text-align: center;
+        }
+
+        .card h3 {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            margin: 10px 0 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .card.critical p {
+            color: #c0392b;
+        }
+
+        .card.high p {
+            color: #e74c3c;
+        }
+
+        .card.medium p {
+            color: #f39c12;
+        }
+
+        .card.low p {
+            color: #3498db;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            margin-top: 30px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #555;
+            background: #eee;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .nav-link.active {
+            background: #fff;
+            border: 2px solid #ddd;
+            border-bottom: 2px solid #fff;
+            font-weight: bold;
+            color: #2c3e50;
+            position: relative;
+            top: 2px;
+        }
+
+        /* Content Sections */
+        .section-header {
+            margin-top: 40px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .issue {
+            background: #fff;
+            margin-top: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .issue.CRITICAL {
+            border-left-color: #c0392b;
+        }
+
+        .issue.HIGH {
+            border-left-color: #e74c3c;
+        }
+
+        .issue.MEDIUM {
+            border-left-color: #f39c12;
+        }
+
+        .issue.LOW {
+            border-left-color: #3498db;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.8em;
+            font-weight: bold;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .bg-CRITICAL {
+            background-color: #c0392b;
+        }
+
+        .bg-HIGH {
+            background-color: #e74c3c;
+        }
+
+        .bg-MEDIUM {
+            background-color: #f39c12;
+        }
+
+        .bg-LOW {
+            background-color: #3498db;
+        }
+
+        .bg-UNKNOWN {
+            background-color: #95a5a6;
+        }
+
+        .ai-fix {
+            background: #e8f6f3;
+            border: 1px solid #a2d9ce;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .ai-fix h3 {
+            color: #16a085;
+            font-size: 1em;
+            margin-top: 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #95a5a6;
+            font-size: 0.8em;
+            padding-bottom: 20px;
+        }
     </style>
 </head>
+
 <body>
     <header>
-        <div class="container">
-            <h1>Monthly Security Audit</h1>
-        </div>
+        <h1>🛡️ CI/CD Security Shield Report</h1>
+        <p style="text-align: center; color: #ecf0f1; margin: 0;">Scan Date: {{ date }} | Target: {{ directory }}</p>
     </header>
 
     <div class="container">
-        <div class="summary">
-            <h2>Executive Summary</h2>
-            <p><strong>Date:</strong> {{ date }}</p>
-            <p><strong>Total Issues Found:</strong> {{ total_issues }}</p>
-            <p><strong>Scanned Directory:</strong> {{ directory }}</p>
+        <!-- Dashboard Summary -->
+        <div class="dashboard">
+            <div class="card critical">
+                <h3>Critical</h3>
+                <p>{{ stats.CRITICAL }}</p>
+            </div>
+            <div class="card high">
+                <h3>High</h3>
+                <p>{{ stats.HIGH }}</p>
+            </div>
+            <div class="card medium">
+                <h3>Medium</h3>
+                <p>{{ stats.MEDIUM }}</p>
+            </div>
+            <div class="card low">
+                <h3>Low</h3>
+                <p>{{ stats.LOW }}</p>
+            </div>
         </div>
 
-        {% for item in findings %}
+        <!-- Infrastructure as Code Section -->
+        <h1 class="section-header">🏗️ Infrastructure as Code (Checkov)</h1>
+        {% if findings.iac %}
+        {% for item in findings.iac %}
         <div class="issue {{ item.check.severity }}">
             <h2>
-                <span class="severity-badge bg-{{ item.check.severity }}">{{ item.check.severity }}</span>
+                <span class="badge bg-{{ item.check.severity }}">{{ item.check.severity }}</span>
                 {{ item.check.check_id }}: {{ item.check.check_name }}
             </h2>
             <p><strong>Resource:</strong> {{ item.check.resource }}</p>
-            <p><strong>File:</strong> {{ item.check.file_path }}:{{ item.check.start_line }}-{{ item.check.end_line }}</p>
-            
-            <h3>Original Code</h3>
-            <pre>{{ item.check.code_block }}</pre>
+            <p><strong>File:</strong> {{ item.check.file_path }}:{{ item.check.start_line }}</p>
 
-            <h3>AI Analysis & Fix</h3>
-            <div class="ai-response">
+            {% if item.check.code_block %}
+            <pre>{{ item.check.code_block }}</pre>
+            {% endif %}
+
+            {% if item.fix %}
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
                 {{ item.fix | replace('\n', '<br>') | safe }}
             </div>
+            {% endif %}
         </div>
         {% endfor %}
+        {% else %}
+        <p>No IaC issues found.</p>
+        {% endif %}
+
+        <!-- Secrets Section -->
+        <h1 class="section-header">🔑 Secrets Detection (Gitleaks)</h1>
+        {% if findings.secrets %}
+        {% for secret in findings.secrets %}
+        <div class="issue CRITICAL"> <!-- Secrets are usually critical -->
+            <h2>
+                <span class="badge bg-CRITICAL">CRITICAL</span>
+                Secret Detected: {{ secret.RuleID }}
+            </h2>
+            <p><strong>File:</strong> {{ secret.File }}:{{ secret.StartLine }}</p>
+            <p><strong>Description:</strong> {{ secret.Description }}</p>
+            <p><strong>Commit:</strong> {{ secret.Commit }}</p>
+            <pre>Match: {{ secret.Match }}</pre>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No secrets found.</p>
+        {% endif %}
+
+        <!-- Container Security Section -->
+        <h1 class="section-header">🐳 Container Security (Trivy)</h1>
+        {% if findings.containers %}
+        {% for item in findings.containers %}
+        <div class="issue {{ item.severity }}">
+            <h2>
+                <span class="badge bg-{{ item.severity }}">{{ item.severity }}</span>
+                {{ item.vulnerability_id }}: {{ item.title }}
+            </h2>
+            <p><strong>Target:</strong> {{ item.target }}</p>
+            <p><strong>Package:</strong> {{ item.pkg_name }} ({{ item.installed_version }})</p>
+            <p><strong>Fixed Version:</strong> {{ item.fixed_version }}</p>
+            <p><strong>Description:</strong> {{ item.description }}</p>
+
+            {% if item.fix %}
+            <div class="ai-fix">
+                <h3>🤖 AI Remediation (Dockerfile)</h3>
+                {{ item.fix | replace('\n', '<br>') | safe }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No container vulnerabilities found.</p>
+        {% endif %}
     </div>
 
     <div class="footer">
-        <p>Generated by IaC Sanity Checker | Powered by OpenAI</p>
+        Generated by Antigravity CI/CD Security Shield
     </div>
 </body>
+
 </html>
