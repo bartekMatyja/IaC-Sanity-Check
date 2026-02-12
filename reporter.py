@@ -19,6 +19,31 @@ def generate_report(findings: dict, directory: str, output_file: str = "security
         script_dir = os.path.dirname(os.path.abspath(__file__))
         templates_dir = os.path.join(script_dir, 'templates')
         
+        # Helper to sort findings by severity
+        severity_order = {
+            "CRITICAL": 4,
+            "HIGH": 3,
+            "MEDIUM": 2,
+            "LOW": 1,
+            "UNKNOWN": 0
+        }
+
+        def get_severity_score(item, category):
+            if category == 'iac':
+                severity = item.get('check', {}).get('severity', 'UNKNOWN')
+            elif category == 'containers':
+                severity = item.get('severity', 'UNKNOWN')
+            else:
+                return 0
+            return severity_order.get(severity.upper(), 0)
+
+        # Sort findings: descending order of severity
+        if 'iac' in findings:
+            findings['iac'].sort(key=lambda x: get_severity_score(x, 'iac'), reverse=True)
+        
+        if 'containers' in findings:
+            findings['containers'].sort(key=lambda x: get_severity_score(x, 'containers'), reverse=True)
+
         env = Environment(loader=FileSystemLoader(templates_dir))
         template = env.get_template('report_template.html')
 
