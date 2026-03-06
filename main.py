@@ -45,19 +45,30 @@ def main():
     
     min_severity_score = SEVERITY_ORDER.get(args.min_severity, 0)
     
+    # Sort checks to prioritize most severe for AI analysis
+    all_checks.sort(key=lambda x: SEVERITY_ORDER.get(x.get('severity', 'UNKNOWN').upper(), 0), reverse=True)
+
+    ai_fix_count = 0
+    AI_FIX_LIMIT = 5
+    
     for c in all_checks:
         severity_val = c.get('severity', 'UNKNOWN').upper()
         if SEVERITY_ORDER.get(severity_val, 0) >= min_severity_score:
             c['severity'] = severity_val
             
-            # Get AI Fix for IaC
-            print(f"🤖 Analyzing IaC issue: {c['check_id']}...")
-            # We need to ensure code_block is a string for the AI prompt
-            if isinstance(c.get('code_block'), list):
-                 code_str = "".join([line[1] for line in c.get('code_block', [])])
-                 c['code_block'] = code_str
-            
-            fix = get_fix_for_check(c)
+            # Get AI Fix for IaC (only if limit not reached)
+            if ai_fix_count < AI_FIX_LIMIT:
+                print(f"🤖 Analyzing IaC issue ({ai_fix_count + 1}/{AI_FIX_LIMIT}): {c['check_id']}...")
+                # We need to ensure code_block is a string for the AI prompt
+                if isinstance(c.get('code_block'), list):
+                     code_str = "".join([line[1] for line in c.get('code_block', [])])
+                     c['code_block'] = code_str
+                
+                fix = get_fix_for_check(c)
+                ai_fix_count += 1
+            else:
+                fix = "AI analysis skipped (limit reached)."
+
             iac_findings.append({'check': c, 'fix': fix})
 
     logger.info(f"IaC Scan complete. Found {len(iac_findings)} issues.")
@@ -94,9 +105,13 @@ def main():
 
                 # AI Fix for Critical Dockerfile issues
                 if 'Dockerfile' in target and vuln['severity'] == 'CRITICAL':
-                    print(f"🤖 Analyzing Critical Dockerfile vulnerability: {vuln['vulnerability_id']}...")
-                    fix = get_fix_for_container_issue(vuln)
-                    vuln['fix'] = fix
+                    if ai_fix_count < AI_FIX_LIMIT:
+                        print(f"🤖 Analyzing Critical Dockerfile vulnerability ({ai_fix_count + 1}/{AI_FIX_LIMIT}): {vuln['vulnerability_id']}...")
+                        fix = get_fix_for_container_issue(vuln)
+                        vuln['fix'] = fix
+                        ai_fix_count += 1
+                    else:
+                        vuln['fix'] = "AI analysis skipped (limit reached)."
                 else:
                     vuln['fix'] = None
                 

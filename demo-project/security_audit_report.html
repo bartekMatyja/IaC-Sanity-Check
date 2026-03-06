@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD Security Shield Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        header {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 20px 0;
+            border-bottom: #e74c3c 4px solid;
+        }
+
+        header h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        /* Dashboard Summary */
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            text-align: center;
+        }
+
+        .card h3 {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            margin: 10px 0 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .card.critical p {
+            color: #c0392b;
+        }
+
+        .card.high p {
+            color: #e74c3c;
+        }
+
+        .card.medium p {
+            color: #f39c12;
+        }
+
+        .card.low p {
+            color: #3498db;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            margin-top: 30px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #555;
+            background: #eee;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .nav-link.active {
+            background: #fff;
+            border: 2px solid #ddd;
+            border-bottom: 2px solid #fff;
+            font-weight: bold;
+            color: #2c3e50;
+            position: relative;
+            top: 2px;
+        }
+
+        /* Content Sections */
+        .section-header {
+            margin-top: 40px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .issue {
+            background: #fff;
+            margin-top: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .issue.CRITICAL {
+            border-left-color: #c0392b;
+        }
+
+        .issue.HIGH {
+            border-left-color: #e74c3c;
+        }
+
+        .issue.MEDIUM {
+            border-left-color: #f39c12;
+        }
+
+        .issue.LOW {
+            border-left-color: #3498db;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 0.8em;
+            font-weight: bold;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .bg-CRITICAL {
+            background-color: #c0392b;
+        }
+
+        .bg-HIGH {
+            background-color: #e74c3c;
+        }
+
+        .bg-MEDIUM {
+            background-color: #f39c12;
+        }
+
+        .bg-LOW {
+            background-color: #3498db;
+        }
+
+        .bg-UNKNOWN {
+            background-color: #95a5a6;
+        }
+
+        .ai-fix {
+            background: #e8f6f3;
+            border: 1px solid #a2d9ce;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .ai-fix h3 {
+            color: #16a085;
+            font-size: 1em;
+            margin-top: 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #95a5a6;
+            font-size: 0.8em;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🛡️ CI/CD Security Shield Report</h1>
+        <p style="text-align: center; color: #ecf0f1; margin: 0;">Scan Date: 2026-02-12 20:57:41 | Target: /data</p>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Summary -->
+        <div class="dashboard">
+            <div class="card critical">
+                <h3>Critical</h3>
+                <p>3</p>
+            </div>
+            <div class="card high">
+                <h3>High</h3>
+                <p>0</p>
+            </div>
+            <div class="card medium">
+                <h3>Medium</h3>
+                <p>0</p>
+            </div>
+            <div class="card low">
+                <h3>Low</h3>
+                <p>10</p>
+            </div>
+        </div>
+
+        <!-- Infrastructure as Code Section -->
+        <h1 class="section-header">🏗️ Infrastructure as Code (Checkov)</h1>
+        
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV2_AWS_6: Ensure that S3 bucket has a Public Access block
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The current configuration of the S3 bucket with an ACL set to "public-read" poses a significant security risk. This setting allows anyone on the internet to read the contents of the bucket, which can lead to unauthorized access to sensitive data. From a business perspective, this exposure can result in data breaches, loss of intellectual property, and damage to the company's reputation. Additionally, it could lead to compliance violations if the data stored in the bucket is subject to regulatory requirements such as GDPR or HIPAA. Ensuring that S3 buckets have a Public Access Block is crucial to prevent accidental public exposure and to maintain control over who can access the data.<br><br>### Corrected Code<br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "private"<br>}<br><br>resource "aws_s3_bucket_public_access_block" "test_bucket_block" {<br>  bucket = aws_s3_bucket.test_bucket.id<br><br>  block_public_acls       = true<br>  block_public_policy     = true<br>  ignore_public_acls      = true<br>  restrict_public_buckets = true<br>}<br>```<br><br>In the corrected code, the ACL is changed to "private" to restrict public access. Additionally, an `aws_s3_bucket_public_access_block` resource is added to ensure that all forms of public access are blocked, providing an extra layer of security to prevent accidental exposure.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV2_AWS_62: Ensure S3 buckets should have event notifications enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability highlights that the S3 bucket does not have event notifications enabled. While the severity is marked as LOW, it is important to understand the implications from both a business and security perspective:<br><br>1. **Business Perspective**: Event notifications allow you to automate workflows and processes by triggering actions when certain events occur in your S3 bucket, such as object creation or deletion. Without these notifications, you may miss critical events that could impact business operations, such as data ingestion processes or real-time analytics.<br><br>2. **Security Perspective**: From a security standpoint, event notifications can be used to monitor and respond to unauthorized access or changes to the data stored in the bucket. Without them, there is a reduced ability to detect and respond to potential security incidents, such as data breaches or unauthorized data manipulation. This could lead to data loss, compliance issues, and damage to the organization's reputation.<br><br>### Corrected Code<br>To address this issue, you should enable event notifications for the S3 bucket. Below is an example of how you can modify the Terraform configuration to include an event notification configuration:<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "public-read"<br>}<br><br>resource "aws_s3_bucket_notification" "test_bucket_notification" {<br>  bucket = aws_s3_bucket.test_bucket.id<br><br>  lambda_function {<br>    lambda_function_arn = "arn:aws:lambda:us-east-1:123456789012:function:ProcessS3Events"<br>    events              = ["s3:ObjectCreated:*"]<br>  }<br>}<br>```<br><br>In this corrected code, an `aws_s3_bucket_notification` resource is added to configure event notifications for the S3 bucket. It specifies a Lambda function to be triggered whenever an object is created in the bucket. You can adjust the `events` and `lambda_function_arn` to suit your specific use case and notification requirements.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_AWS_18: Ensure the S3 bucket has access logging enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability highlights the absence of access logging on the S3 bucket. From a business and security perspective, this configuration is risky for several reasons:<br><br>1. **Lack of Accountability**: Without access logging, it is challenging to track who accessed the bucket and what actions were performed. This lack of visibility can hinder investigations in the event of unauthorized access or data breaches.<br><br>2. **Compliance Issues**: Many regulatory frameworks and industry standards require logging of access to sensitive data. Failing to enable access logging could result in non-compliance, potentially leading to legal penalties or loss of business reputation.<br><br>3. **Incident Response**: In the event of a security incident, access logs are crucial for understanding the scope and impact of the incident. Without logs, it becomes difficult to perform a thorough forensic analysis.<br><br>4. **Data Exposure**: The bucket is configured with a public-read ACL, which means anyone on the internet can read the contents of the bucket. Without logging, you cannot monitor or control who is accessing your data, increasing the risk of data exposure.<br><br>### Corrected Code<br>To address the vulnerability, you should enable access logging for the S3 bucket. This involves specifying a target bucket where the logs will be stored. Ensure that the target bucket also has appropriate permissions and logging enabled.<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "public-read"<br><br>  logging {<br>    target_bucket = "your-log-bucket-name"<br>    target_prefix = "log/"<br>  }<br>}<br><br>resource "aws_s3_bucket" "log_bucket" {<br>  bucket = "your-log-bucket-name"<br>  acl    = "log-delivery-write"<br>}<br>```<br><br>In this corrected code, replace `"your-log-bucket-name"` with the actual name of the bucket you want to use for storing logs. Ensure that the log bucket has the appropriate permissions to allow the S3 service to write logs to it.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV2_AWS_61: Ensure that an S3 bucket has a lifecycle configuration
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability highlights the absence of a lifecycle configuration for the S3 bucket. From a business perspective, this can lead to increased storage costs as old or unused data is not automatically transitioned to cheaper storage classes or deleted. This can be particularly costly if the bucket stores large volumes of data over time.<br><br>From a security perspective, the lack of a lifecycle configuration can result in data retention beyond its necessary period, potentially increasing the risk of data breaches. Retaining data longer than needed can expose sensitive information to unauthorized access, especially if the bucket is publicly accessible, as indicated by the "public-read" ACL setting. This public access further exacerbates the risk, as it allows anyone on the internet to read the contents of the bucket, making it imperative to manage data lifecycle effectively to minimize exposure.<br><br>### Corrected Code<br>To address this vulnerability, you should add a lifecycle configuration to the S3 bucket. This configuration will help manage the data lifecycle by transitioning objects to cheaper storage classes or deleting them after a specified period.<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "public-read"<br><br>  lifecycle_rule {<br>    id      = "expire_old_objects"<br>    enabled = true<br><br>    expiration {<br>      days = 365<br>    }<br><br>    transition {<br>      days          = 30<br>      storage_class = "STANDARD_IA"<br>    }<br>  }<br>}<br>```<br><br>In this corrected code, a lifecycle rule is added to transition objects to the "STANDARD_IA" (Infrequent Access) storage class after 30 days and to delete them after 365 days. This helps in managing storage costs and reduces the risk of data exposure by not retaining data longer than necessary.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_AWS_21: Ensure all data stored in the S3 bucket have versioning enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability highlights that the S3 bucket does not have versioning enabled. From a business and security perspective, this configuration poses several risks:<br><br>1. **Data Loss**: Without versioning, any accidental or malicious deletion or overwrite of objects in the bucket could result in permanent data loss. This could disrupt business operations and lead to significant data recovery costs.<br><br>2. **Compliance Issues**: Many industries have regulations requiring data retention and protection against accidental deletion. Lack of versioning could lead to non-compliance with such regulations, potentially resulting in legal penalties.<br><br>3. **Security Risks**: If an unauthorized user gains access to the bucket, they could delete or modify data without a trace. Versioning helps mitigate this risk by allowing recovery of previous versions of objects.<br><br>4. **Audit and Recovery**: Versioning provides a history of changes to objects, which is crucial for auditing and forensic analysis in the event of a security incident.<br><br>### Corrected Code<br>To address this vulnerability, you should enable versioning on the S3 bucket. Here is the corrected Terraform configuration:<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "public-read"<br>}<br><br>resource "aws_s3_bucket_versioning" "test_bucket_versioning" {<br>  bucket = aws_s3_bucket.test_bucket.id<br><br>  versioning_configuration {<br>    status = "Enabled"<br>  }<br>}<br>```<br><br>This configuration adds an `aws_s3_bucket_versioning` resource, which enables versioning on the specified S3 bucket, thereby mitigating the risks associated with data loss and enhancing the security posture of your infrastructure.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_AWS_144: Ensure that S3 bucket has cross-region replication enabled
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability relates to the lack of cross-region replication for an S3 bucket, which is flagged as a low-severity issue. However, the more pressing concern in this configuration is the use of the `public-read` ACL, which poses a significant security risk. <br><br>From a business perspective, having an S3 bucket publicly accessible can lead to unauthorized access to sensitive data, resulting in data breaches, loss of intellectual property, and potential legal liabilities. Publicly accessible buckets have been the source of numerous high-profile data leaks, damaging reputations and incurring financial penalties.<br><br>From a security perspective, the lack of cross-region replication itself is not inherently dangerous but can impact data durability and availability. Cross-region replication ensures that data is replicated across different geographical regions, providing resilience against regional outages and improving data access performance for global users. Without it, data may be vulnerable to loss in the event of a regional failure.<br><br>### Corrected Code<br>To address the security risk of public access and ensure cross-region replication, the following code corrections are recommended:<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "private"  # Change ACL to private to restrict public access<br><br>  # Enable cross-region replication<br>  versioning {<br>    enabled = true<br>  }<br><br>  replication_configuration {<br>    role = aws_iam_role.replication_role.arn<br><br>    rules {<br>      id     = "replication-rule"<br>      status = "Enabled"<br><br>      destination {<br>        bucket        = aws_s3_bucket.destination_bucket.arn<br>        storage_class = "STANDARD"<br>      }<br>    }<br>  }<br>}<br><br>resource "aws_iam_role" "replication_role" {<br>  # Define the IAM role and policy for replication<br>  # (This is a placeholder and should be configured with appropriate permissions)<br>}<br><br>resource "aws_s3_bucket" "destination_bucket" {<br>  bucket = "replication-destination-bucket"<br>  acl    = "private"<br>}<br>```<br><br>In this corrected code:<br>- The ACL is set to `private` to prevent unauthorized public access.<br>- Versioning is enabled to support replication.<br>- A replication configuration is added, specifying a destination bucket and an IAM role with the necessary permissions for replication. This ensures data is replicated to another region, enhancing durability and availability.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_AWS_145: Ensure that S3 buckets are encrypted with KMS by default
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability highlights a configuration issue where the S3 bucket is not encrypted with AWS Key Management Service (KMS) by default. From a business and security perspective, this poses several risks:<br><br>1. **Data Exposure**: Without encryption, data stored in the S3 bucket is vulnerable to unauthorized access. If sensitive or proprietary information is stored in the bucket, it could be exposed to malicious actors, leading to data breaches.<br><br>2. **Compliance Violations**: Many industries have regulatory requirements mandating encryption of data at rest, such as GDPR, HIPAA, and PCI-DSS. Failing to encrypt data could result in non-compliance, leading to legal penalties and fines.<br><br>3. **Reputation Damage**: A data breach resulting from unencrypted data can severely damage an organization's reputation, eroding customer trust and impacting business relationships.<br><br>4. **Lack of Access Control**: Using KMS for encryption allows for fine-grained access control through key policies, ensuring that only authorized users and services can decrypt the data. Without this, there is a higher risk of unauthorized access.<br><br>### Corrected Code<br>To address this vulnerability, the S3 bucket should be configured to use server-side encryption with AWS KMS. Here is the corrected code:<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "public-read"<br><br>  server_side_encryption_configuration {<br>    rule {<br>      apply_server_side_encryption_by_default {<br>        kms_master_key_id = "alias/my-kms-key"  # Replace with your KMS key alias or ARN<br>        sse_algorithm     = "aws:kms"<br>      }<br>    }<br>  }<br>}<br>```<br><br>In this corrected configuration, the `server_side_encryption_configuration` block ensures that all objects stored in the bucket are encrypted using AWS KMS, providing enhanced security and compliance with industry standards.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_AWS_20: S3 Bucket has an ACL defined which allows public READ access.
+            </h2>
+            <p><strong>Resource:</strong> aws_s3_bucket.test_bucket</p>
+            <p><strong>File:</strong> /terraform/s3.tf:1</p>
+
+            
+            <pre>resource "aws_s3_bucket" "test_bucket" {
+  bucket = "test-checkov-scan-bucket-demo"
+  acl    = "public-read"
+}
+</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The configuration of the S3 bucket with an Access Control List (ACL) set to "public-read" poses significant security and business risks. From a security perspective, this setting allows anyone on the internet to read the contents of the bucket. This can lead to unauthorized access to sensitive data, data leaks, and potential breaches of compliance with data protection regulations such as GDPR or HIPAA. From a business perspective, exposing data publicly can result in reputational damage, loss of customer trust, and potential financial penalties. Additionally, if the bucket contains proprietary or confidential information, it could lead to competitive disadvantages or legal liabilities.<br><br>### Corrected Code<br>To mitigate this risk, the ACL should be set to "private" to ensure that only authorized users can access the bucket's contents. Here is the corrected code:<br><br>```hcl<br>resource "aws_s3_bucket" "test_bucket" {<br>  bucket = "test-checkov-scan-bucket-demo"<br>  acl    = "private"<br>}<br>```<br><br>By setting the ACL to "private," you ensure that the bucket's contents are not publicly accessible, thereby protecting the data from unauthorized access and aligning with best practices for data security.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_DOCKER_2: Ensure that HEALTHCHECK instructions have been added to container images
+            </h2>
+            <p><strong>Resource:</strong> /Dockerfile.</p>
+            <p><strong>File:</strong> /Dockerfile:1</p>
+
+            
+            <pre>FROM node:14
+RUN echo "Running on old node"</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability relates to the absence of a `HEALTHCHECK` instruction in the Dockerfile. While the severity is marked as LOW, it is important to understand the implications from both a business and security perspective:<br><br>1. **Business Perspective**: Without a `HEALTHCHECK`, there is no automated way to verify that the application running inside the container is functioning correctly. This can lead to undetected failures, resulting in downtime or degraded performance, which can affect customer satisfaction and business operations. In a production environment, ensuring application reliability is crucial for maintaining service level agreements (SLAs) and customer trust.<br><br>2. **Security Perspective**: A lack of `HEALTHCHECK` can also pose security risks. If a container becomes unresponsive or behaves unexpectedly due to an internal issue, it might not be detected promptly. This could potentially be exploited by attackers to perform malicious activities unnoticed. Additionally, without regular health checks, it becomes challenging to implement effective monitoring and alerting systems, which are essential for identifying and responding to security incidents in a timely manner.<br><br>### Corrected Code<br>To address this vulnerability, you should add a `HEALTHCHECK` instruction to the Dockerfile. This will ensure that the container's health is regularly checked and any issues are detected early.<br><br>```hcl<br>FROM node:14<br>RUN echo "Running on old node"<br><br>HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl -f http://localhost:3000/ || exit 1<br>```<br><br>In this corrected code, the `HEALTHCHECK` instruction is added to periodically check the health of the application by making an HTTP request to the service running on port 3000. Adjust the URL and port according to your application's configuration. This ensures that the container is automatically monitored and any failures are detected and can be addressed promptly.
+            </div>
+            
+        </div>
+        
+        <div class="issue LOW">
+            <h2>
+                <span class="badge bg-LOW">LOW</span>
+                CKV_DOCKER_3: Ensure that a user for the container has been created
+            </h2>
+            <p><strong>Resource:</strong> /Dockerfile.</p>
+            <p><strong>File:</strong> /Dockerfile:1</p>
+
+            
+            <pre>FROM node:14
+RUN echo "Running on old node"</pre>
+            
+
+            
+            <div class="ai-fix">
+                <h3>🤖 AI Logic Analysis & Fix</h3>
+                ### Risk Analysis<br>The identified vulnerability, CKV_DOCKER_3, highlights the absence of a non-root user in the Docker container. By default, Docker containers run as the root user, which has unrestricted access to the entire system. This configuration poses several risks:<br><br>1. **Security Risk**: Running processes as root inside a container can lead to privilege escalation attacks. If an attacker exploits a vulnerability within the application, they could gain root access to the host system, potentially compromising other containers and the host itself.<br><br>2. **Business Risk**: A security breach could lead to data theft, service disruption, and loss of customer trust. This could result in financial losses, legal liabilities, and damage to the company's reputation.<br><br>3. **Compliance Risk**: Many regulatory standards and security best practices require minimizing the use of privileged accounts. Failing to comply with these standards could lead to penalties and increased scrutiny from regulatory bodies.<br><br>### Corrected Code<br>To mitigate this risk, you should create a non-root user and switch to it within the Dockerfile. Here's how you can modify the Dockerfile:<br><br>```hcl<br>FROM node:14<br><br># Create a non-root user and group<br>RUN groupadd -r appuser && useradd -r -s /bin/false -g appuser appuser<br><br># Switch to the non-root user<br>USER appuser<br><br>RUN echo "Running on old node"<br>```<br><br>This change ensures that the container runs with limited privileges, reducing the risk of privilege escalation and improving the overall security posture of your application.
+            </div>
+            
+        </div>
+        
+        
+
+        <!-- Secrets Section -->
+        <h1 class="section-header">🔑 Secrets Detection (Gitleaks)</h1>
+        
+        
+        <div class="issue CRITICAL"> <!-- Secrets are usually critical -->
+            <h2>
+                <span class="badge bg-CRITICAL">CRITICAL</span>
+                Secret Detected: aws-access-token
+            </h2>
+            <p><strong>File:</strong> /data/config/keys.py:2</p>
+            <p><strong>Description:</strong> Identified a pattern that may indicate AWS credentials, risking unauthorized cloud resource access and data breaches on AWS platforms.</p>
+            <p><strong>Commit:</strong> </p>
+            <pre>Match: AKIAIOSFODNN7EXAMPLE</pre>
+        </div>
+        
+        <div class="issue CRITICAL"> <!-- Secrets are usually critical -->
+            <h2>
+                <span class="badge bg-CRITICAL">CRITICAL</span>
+                Secret Detected: aws-access-token
+            </h2>
+            <p><strong>File:</strong> /data/security_audit_report.html:490</p>
+            <p><strong>Description:</strong> Identified a pattern that may indicate AWS credentials, risking unauthorized cloud resource access and data breaches on AWS platforms.</p>
+            <p><strong>Commit:</strong> </p>
+            <pre>Match: AKIAIOSFODNN7EXAMPLE</pre>
+        </div>
+        
+        <div class="issue CRITICAL"> <!-- Secrets are usually critical -->
+            <h2>
+                <span class="badge bg-CRITICAL">CRITICAL</span>
+                Secret Detected: aws-access-token
+            </h2>
+            <p><strong>File:</strong> /data/security_audit_report.html:501</p>
+            <p><strong>Description:</strong> Identified a pattern that may indicate AWS credentials, risking unauthorized cloud resource access and data breaches on AWS platforms.</p>
+            <p><strong>Commit:</strong> </p>
+            <pre>Match: AKIAIOSFODNN7EXAMPLE</pre>
+        </div>
+        
+        
+
+        <!-- Container Security Section -->
+        <h1 class="section-header">🐳 Container Security (Trivy)</h1>
+        
+        <p>No container vulnerabilities found.</p>
+        
+    </div>
+
+    <div class="footer">
+        Generated by Antigravity CI/CD Security Shield
+    </div>
+</body>
+
+</html>
